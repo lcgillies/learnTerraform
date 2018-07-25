@@ -1,3 +1,9 @@
+#  Set up everything but the ELB first
+#  (comment out ELB ref in the ASG)
+#  Then uncomment and run ELB once EC2 mods are 2/2
+#  issues with healthcheck are preventing the binding of the ELB
+
+
 provider "aws" {
   region = "us-east-2"
 }
@@ -91,17 +97,18 @@ resource "aws_elb" "example" {
       lb_protocol       = "http"
     }
 
-/*    health_check {
+
+    health_check {
       healthy_threshold   = 2
-      unhealthy_threshold = 2
+      unhealthy_threshold = 10
       timeout             = 3
       target              = "HTTP:${var.server_port}/"
       interval            = 30
-    }*/
+    }
 }
 
 /*
-# single server config
+# single server config - obs
 resource "aws_instance" "example" {
   ami           = "ami-5e8bb23b"
   instance_type = "t2.micro"
